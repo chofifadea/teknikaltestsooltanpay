@@ -1,0 +1,27 @@
+FROM php:7.4-apache
+
+ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions /usr/local/bin/
+
+RUN chmod uga+x /usr/local/bin/install-php-extensions && sync \
+    && install-php-extensions bz2 \
+    gettext \
+    intl \
+    exif \
+    pdo_pgsql \
+    pdo_mysql \
+    bcmath
+
+COPY . /var/www/html
+WORKDIR /var/www/html
+
+
+#RUN apt-get install composer
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+RUN composer install
+RUN php artisan key:generate
+#RUN php artisan make:controller jalanin klo ada controller baru : kubectl/docker exec -it
+#RUN php artisan make:migration jalanin klo ada database baru kubectl/docker exec -it
+#CMD [ "php", "artisan", "serve", "--host=0.0.0.0" ]
+
+EXPOSE 80
+EXPOSE 8000

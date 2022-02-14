@@ -1,0 +1,31 @@
+FROM php:7.4-apache
+
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions /usr/local/bin/
+
+RUN chmod uga+x /usr/local/bin/install-php-extensions && sync \
+    && install-php-extensions bz2 \
+    gettext \
+    intl \
+    exif \
+    pdo_pgsql \
+    pdo_mysql \
+    bcmath
+    
+COPY default.conf /etc/apache2/sites-enabled/000-default.conf
+# COPY .env.example /app/.env
+
+RUN a2enmod rewrite
+
+WORKDIR /app
+
+
+COPY . /app/
+
+RUN composer install
+
+RUN rm -Rf /var/www/html
+RUN ln -sFf /app/public /var/www/html
+RUN chown www-data:www-data -R /app
+
+EXPOSE 80

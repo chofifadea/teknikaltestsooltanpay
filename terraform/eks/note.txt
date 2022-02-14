@@ -1,0 +1,3 @@
+problem  : Unable to connect to the server: getting credentials: exec: exec: "heptio-authenticator-aws": executable file not found in $PATH #132 
+
+solution : https://github.com/kubernetes-sigs/aws-iam-authenticator/issues/132

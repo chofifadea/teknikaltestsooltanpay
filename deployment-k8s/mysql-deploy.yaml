@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: development
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - env:
+        - name: MYSQL_DATABASE
+          value: laravel
+        - name: MYSQL_PASSWORD
+          value: laravel
+        - name: MYSQL_ROOT_PASSWORD
+          value: laravel
+        - name: MYSQL_USER
+          value: laravel
+        image: mysql:5.7
+        imagePullPolicy: ""
+        name: mysql
+        ports:
+        - containerPort: 3306
+        resources: {}
+      restartPolicy: Always
+
