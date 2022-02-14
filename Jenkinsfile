@@ -7,7 +7,7 @@ pipeline {
      stage('Login to registry') {
         steps {
             script {
-            sh 'cat /home/ubuntu/password_docker.txt | docker login --username chofifadea --password-stdin'
+            sh 'cat /var/lib/jenkins/password_docker.txt | docker login --username chofifadea --password-stdin'
                 }
             }
         }
